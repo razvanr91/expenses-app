@@ -20,6 +20,10 @@
 # Preserved original app tree; do not add it to source control.
 /.app-scaffold-backup/
 
+# Local agent tooling and generated previews
+/.github/agents/
+/.azure/.preview-temp/
+
 # production
 /build
 
