@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Income Tracker
 
-## Getting Started
+A single-user local income tracker for GBP. Record income, filter entries, and
+review monthly totals, category breakdowns, and a six-month trend.
 
-First, run the development server:
+## Local setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Install the dependencies with `npm install`.
+2. Copy `.env.example` to `.env` and replace its placeholders with private local
+   values. Keep `.env` out of source control; never paste secrets into code or
+   chat.
+3. Start the local database with `docker compose up -d db`.
+4. Generate the Prisma client with `npm run prisma:generate`.
+5. Apply the Prisma migration created during the integration step with
+   `npx prisma migrate dev`.
+6. Start the app with `npm run dev` and open <http://localhost:3000>.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+No migration or seed data is included in the scaffold. The integration step
+creates the PostgreSQL migration and verifies the API against the local
+database.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `GET /api/health` — application and database readiness.
+- `GET /api/entries` — list entries; optional `from`, `to`, `category`, and
+  `source` filters.
+- `POST /api/entries` — create an entry.
+- `GET /api/entries/{id}` — retrieve an entry.
+- `PATCH /api/entries/{id}` — update an entry.
+- `DELETE /api/entries/{id}` — delete an entry.
+- `GET /api/dashboard?month=YYYY-MM` — monthly total, category totals, and the
+  six-month trend.
 
-## Learn More
+Amounts are stored as PostgreSQL `DECIMAL(12,2)` and passed through the API as
+decimal strings to avoid binary floating-point rounding.
 
-To learn more about Next.js, take a look at the following resources:
+## Quality checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `npm run lint`
+- `npm run build`

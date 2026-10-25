@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# Preserved original app tree; do not add it to source control.
+/.app-scaffold-backup/
+
 # production
 /build
 
@@ -32,6 +35,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
